@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from yatube.settings import LOGIN_URL
 from ..models import Post, Group
 
 User = get_user_model()
@@ -124,5 +124,5 @@ class PostsURLTests(TestCase):
                     response = self.guest_client.get(url, follow=True)
                     self.assertRedirects(
                         response,
-                        reverse(LOGIN_URL) + f'?next={url}',
+                        reverse(settings.LOGIN_URL) + f'?next={url}',
                     )

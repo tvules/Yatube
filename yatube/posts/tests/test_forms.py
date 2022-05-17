@@ -132,7 +132,7 @@ class CommentFormTest(TestCase):
         form = {
             'text': 'TestComment',
         }
-        response = self.authorized_client.post(
+        self.authorized_client.post(
             reverse('posts:add_comment', kwargs={'post_id': self.post.pk}),
             data=form,
         )

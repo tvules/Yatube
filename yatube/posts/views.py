@@ -1,18 +1,16 @@
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic.base import RedirectView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, FormView
-from django.views.generic.list import ListView
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-
+from django.views.generic.base import RedirectView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.list import ListView
 
 from .forms import PostForm, CommentForm
-from .models import Post, Group, Comment, User, Follow
+from .models import Post, Group, User, Follow
 from .utils import AuthorRequiredMixin
 
 
