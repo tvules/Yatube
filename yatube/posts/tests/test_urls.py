@@ -45,43 +45,46 @@ class PostsURLTests(TestCase):
         self.author_client = Client()
         self.author_client.force_login(self.user_author)
         self.URLS = {
-            f'/group/{self.group.slug}/': {
+            reverse('posts:group_list', args=(self.group.slug,)): {
                 'access': 'free',
-                'url_path': '/group/<slug>/',
                 'template': 'posts/group_list.html',
             },
-            f'/profile/{self.user_author.get_username()}/': {
+            reverse('posts:profile', args=(self.user_author.get_username(),)): {
                 'access': 'free',
-                'url_path': '/profile/<username>/',
                 'template': 'posts/profile.html',
             },
-            f'/posts/{self.post.id}/': {
+            reverse('posts:post_detail', args=(self.post.id,)): {
                 'access': 'free',
-                'url_path': '/posts/<post_id>/',
                 'template': 'posts/post_detail.html',
             },
-            f'/posts/{self.post.id}/edit/': {
+            reverse('posts:post_edit', args=(self.post.id,)): {
                 'access': 'author',
-                'url_path': '/posts/<post_id>/edit/',
                 'template': 'posts/create_post.html',
             },
-            f'/posts/{self.post.id}/comment/': {
+            reverse('posts:add_comment', args=(self.post.id,)): {
                 'access': 'auth',
-                'url_path': '/posts/<post_id>/comment/',
                 'template': None,
             },
-            '/create/': {
+            reverse('posts:post_create'): {
                 'access': 'auth',
                 'template': 'posts/create_post.html',
             },
-            f'/profile/{self.user_author.get_username()}/follow/': {
+            reverse('posts:follow_index'): {
                 'access': 'auth',
-                'url_path': '/profile/<username>/follow/',
+                'template': 'posts/follow.html',
+            },
+            reverse(
+                'posts:profile_follow',
+                args=(self.user_author.get_username(),)
+            ): {
+                'access': 'auth',
                 'template': None,
             },
-            f'/profile/{self.user_author.get_username()}/unfollow/': {
+            reverse(
+                'posts:profile_unfollow',
+                args=(self.user_author.get_username(),)
+            ): {
                 'access': 'free',
-                'url_path': '/profile/<username>/unfollow/',
                 'template': None,
             },
         }
@@ -99,8 +102,6 @@ class PostsURLTests(TestCase):
                 self.assertIn(
                     response.status_code,
                     (HTTPStatus.OK, HTTPStatus.METHOD_NOT_ALLOWED),
-                    (f'Страница `{details.get("url_path", url)}` не найдена, '
-                     f'проверьте этот адрес в *urls.py*')
                 )
 
     def test_urls_uses_correct_template(self):
@@ -112,8 +113,6 @@ class PostsURLTests(TestCase):
                     self.assertTemplateUsed(
                         response,
                         details['template'],
-                        (f'URL-адрес `{details.get("url_path", url)}` '
-                         f'использует не соответствующий html-шаблон.')
                     )
 
     def test_urls_redirect_anonymous_on_login(self):

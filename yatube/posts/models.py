@@ -8,17 +8,17 @@ User = get_user_model()
 class Group(models.Model):
     """Модель для сообществ."""
     title = models.CharField(
+        'Название',
         max_length=200,
-        verbose_name='Название',
         help_text='Название не должно превышать 200 символов.',
     )
     slug = models.SlugField(
+        'slug',
         unique=True,
-        verbose_name='slug',
         help_text='Должен быть уникальным.',
     )
     description = models.TextField(
-        verbose_name='Описание',
+        'Описание',
     )
 
     def __str__(self):
@@ -28,12 +28,12 @@ class Group(models.Model):
 class Post(models.Model):
     """Модель для постов."""
     text = models.TextField(
-        verbose_name='Текст',
+        'Текст',
         help_text='Текст нового поста'
     )
     pub_date = models.DateTimeField(
+        'Дата публикации',
         auto_now_add=True,
-        verbose_name='Дата публикации'
     )
     author = models.ForeignKey(
         User,
@@ -51,7 +51,7 @@ class Post(models.Model):
         help_text='Данный параметр необязательный'
     )
     image = models.ImageField(
-        verbose_name='Картинка',
+        'Картинка',
         upload_to='posts/',
         blank=True,
     )
@@ -84,12 +84,12 @@ class Comment(models.Model):
         verbose_name='Автор',
     )
     text = models.TextField(
-        verbose_name='Текст',
+        'Текст',
         help_text='Текст комментария',
     )
     created = models.DateTimeField(
+        'Дата публикации',
         auto_now_add=True,
-        verbose_name='Дата публикации',
     )
 
     class Meta:
@@ -122,3 +122,7 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'],
+                                    name='unique_following'),
+        ]
