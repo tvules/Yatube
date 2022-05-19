@@ -49,7 +49,10 @@ class PostsURLTests(TestCase):
                 'access': 'free',
                 'template': 'posts/group_list.html',
             },
-            reverse('posts:profile', args=(self.user_author.get_username(),)): {
+            reverse(
+                'posts:profile',
+                args=(self.user_author.get_username(),)
+            ): {
                 'access': 'free',
                 'template': 'posts/profile.html',
             },
