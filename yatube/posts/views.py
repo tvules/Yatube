@@ -146,12 +146,12 @@ class ProfileFollowView(LoginRequiredMixin, RedirectView):
     pattern_name = 'posts:profile'
 
     def get(self, request, *args, **kwargs):
-        self.follow(request)
+        self.follow()
         return super().get(request, *args, **kwargs)
 
-    def follow(self, request, *args, **kwargs):
+    def follow(self):
         author = get_object_or_404(User, username=self.kwargs['username'])
-        if author != request.user:
+        if author != self.request.user:
             Follow.objects.get_or_create(
                 user=self.request.user,
                 author=author,
@@ -163,13 +163,12 @@ class ProfileUnFollowView(LoginRequiredMixin, RedirectView):
     pattern_name = 'posts:profile'
 
     def get(self, request, *args, **kwargs):
-        self.unfollow(request)
+        self.unfollow()
         return super().get(request, *args, **kwargs)
 
-    def unfollow(self, request):
+    def unfollow(self):
         author = get_object_or_404(User, username=self.kwargs['username'])
-        if author != self.request.user:
-            Follow.objects.filter(
-                user=self.request.user,
-                author=author
+        Follow.objects.filter(
+            user=self.request.user,
+            author=author
             ).delete()
